@@ -1,9 +1,9 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Showcase from "@/components/Showcase";
+import classes from '@/styles/Layout.module.css';
 import Head from "next/head";
 import {useRouter} from "next/router";
-import classes from '../styles/Layout.module.css';
 
 export default function Layout({title, keywords, description, children}) {
     const router = useRouter();
