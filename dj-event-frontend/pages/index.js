@@ -1,11 +1,9 @@
-import {useRouter} from "next/router";
+import Layout from "@/components/Layout";
 
 export default function HomePage() {
-    const router = useRouter();
     return (
-        <div>
+        <Layout>
             <h1>Home</h1>
-            <button onClick={() => router.push('/about')}>About</button>
-        </div>
+        </Layout>
     );
 }
