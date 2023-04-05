@@ -35,7 +35,7 @@ export default function EventPage({evt}) {
                 <p>{evt.performers}</p>
                 <h3>Description:</h3>
                 <p>{evt.description}</p>
-                <h3>Vanue:{evt.vanue}</h3>
+                <h3>Vanue:{evt.venue}</h3>
                 <p>{evt.address}</p>
 
                 <Link href={'/events'} className={styles.back}>
