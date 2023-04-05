@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import {API_URL} from "@/config/index";
 
 export default function EventsPage({events}) {
-    console.log("EVENTS ... ", events);
+    // console.log("EVENT.................... ", events);
     return (
         <Layout>
             <h1>Upcoming Events</h1>
@@ -11,15 +11,15 @@ export default function EventsPage({events}) {
             {events.map(event => (
                 <EventItem key={event.id} evt={event}/>
             ))}
-
-
         </Layout>
     );
 }
 
 export async function getStaticProps() {
-    const res = await fetch(`${API_URL}/api/events`);
-    const events = await res.json();
+    const res = await fetch(`${API_URL}/api/events?_sort=date:ASC&populate=*`);
+    const {data: events} = await res.json();
+
+    // console.log("events log......", events);
 
     return {
         props: {events},
