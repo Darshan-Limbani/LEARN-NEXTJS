@@ -1,3 +1,4 @@
+import {NEXT_URL} from "@/config/index";
 import {createContext, useState} from "react";
 
 const AuthContext = createContext();
@@ -15,11 +16,31 @@ export const AuthProvider = ({children}) => {
 //     Login User
 
     const login = async ({email: identifier, password}) => {
-        console.log(identifier, password);
+
+        console.log("LOGIN IN AUTH", identifier, password);
+
+        const res = await fetch(`${NEXT_URL}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                identifier, password
+            })
+        });
+
+        const data = await res.json();
+        console.log("AUTH : ", data);
+        if (res.ok) {
+            setUser(data.user);
+        } else {
+            // toast.error("ERROR");
+            setError(data.message);
+            // setError(null);
+        }
     };
+    
 //     LogOut User
-
-
     const logOut = async () => {
         console.log('logOut');
     };
@@ -30,7 +51,7 @@ export const AuthProvider = ({children}) => {
     };
 
     return (
-        <AuthContext.Provider value={{user, error, register, login, logOut}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{user, setError, error, register, login, logOut}}>{children}</AuthContext.Provider>
     );
 };
 
