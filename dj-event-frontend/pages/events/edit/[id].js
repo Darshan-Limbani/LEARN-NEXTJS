@@ -1,7 +1,9 @@
 import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
 import {API_URL} from "@/config/index";
 import styles from "@/styles/Form.module.css";
 import moment from "moment";
+import {shouldHardNavigate} from "next/dist/client/components/router-reducer/should-hard-navigate";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -23,6 +25,8 @@ export default function EditEventPage({evt}) {
     });
 
     const [imagePreview, setImagePreview] = useState(evt.attributes.image ? evt.attributes.image.data.attributes.formats.thumbnail.url : null);
+
+    const [showModal, setShowModal] = useState(false);
 
     const router = useRouter();
 
@@ -146,10 +150,14 @@ export default function EditEventPage({evt}) {
             )
         }
         <div>
-            <button className={'btn-secondary'}>
+            <button className={'btn-secondary'} onClick={() => setShowModal(true)}>
                 <FaImage/> Set Image
             </button>
         </div>
+
+        <Modal show={showModal} onClose={() => setShowModal(false)}>
+            IMAGE UPLOAD
+        </Modal>
     </Layout>);
 }
 
