@@ -1,28 +1,26 @@
 import EventItem from "@/components/EventItem";
 import Layout from "@/components/Layout";
-import {API_URL} from "@/config/index";
+import Pagination from "@/components/Pagination";
+import {API_URL, PER_PAGE} from "@/config/index";
 
-export default function EventsPage({events}) {
+
+export default function EventsPage({events, pagination}) {
     // console.log("EVENT.................... ", events);
-    return (
-        <Layout>
-            <h1>Upcoming Events</h1>
-            {events.length === 0 && <h3>No Events to show</h3>}
-            {events.map(event => (
-                <EventItem key={event.id} evt={event}/>
-            ))}
-        </Layout>
-    );
+    return (<Layout>
+        <h1>Upcoming Events</h1>
+        {events.length === 0 && <h3>No Events to show</h3>}
+        {events.map(event => (<EventItem key={event.id} evt={event}/>))}
+        <Pagination page={pagination.page} total={pagination.pageCount}/>
+    </Layout>);
 }
 
-export async function getStaticProps() {
-    const res = await fetch(`${API_URL}/api/events?_sort=date:ASC&populate=*`);
-    const {data: events} = await res.json();
+export async function getServerSideProps({query: {page = 1}}) {
 
-    // console.log("events log......", events);
+    const res = await fetch(`${API_URL}/api/events?_sort=date:ASC&populate=*&pagination[pageSize]=${PER_PAGE}
+    &pagination[page]=${page}`);
+    const events = await res.json();
 
     return {
-        props: {events},
-        revalidate: 1
+        props: {events: events.data, pagination: events.meta.pagination}
     };
 }

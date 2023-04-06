@@ -25,7 +25,7 @@ export default function EditEventPage({evt}) {
     });
 
     const [imagePreview, setImagePreview] = useState(evt.attributes.image ? evt.attributes.image.data.attributes.formats.thumbnail.url : null);
-
+ 
     const [showModal, setShowModal] = useState(false);
 
     const router = useRouter();
@@ -70,7 +70,7 @@ export default function EditEventPage({evt}) {
         const {name, value} = e.target;
         setValue({...values, [name]: value});
     };
-    
+
     return (<Layout title="add event">
         <Link href="/events">Go Back</Link>
         <h1>Edit Event</h1>
