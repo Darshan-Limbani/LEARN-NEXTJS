@@ -1,4 +1,5 @@
 import {API_URL} from "@/config/index";
+import cookie from "cookie";
 
 export default async (req, res) => {
     console.log('identifier, password', req.body.identifier, req.body.password);
@@ -18,6 +19,16 @@ export default async (req, res) => {
 
         console.log("JWT TOKEN : ", data.jwt);
         if (strapiRes.ok) {
+            res.setHeader('Set-Cookie', cookie.serialize(
+                'token', data.jwt,
+                {
+                    httpOnly: true,
+                    isSecureContext: process.env.NODE_ENV !== 'development',
+                    maxAge: 60 * 60 * 4 * 7,
+                    sameSite: 'strict',
+                    path: '/'
+                }
+            ));
             res.status(200).json({user: data.user});
         } else {
             console.log("data : ", data);
@@ -25,7 +36,6 @@ export default async (req, res) => {
                 message: data.error.message
             });
         }
-
 
     } else {
         res.setHeader('Allow', ['POST']);
