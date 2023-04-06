@@ -24,8 +24,8 @@ export default function EditEventPage({evt}) {
         description: evt.attributes.description,
     });
 
-    const [imagePreview, setImagePreview] = useState(evt.attributes.image ? evt.attributes.image.data.attributes.formats.thumbnail.url : null);
- 
+    const [imagePreview, setImagePreview] = useState(evt.attributes.image.data ? evt.attributes.image.data.attributes.formats.thumbnail.url : null);
+
     const [showModal, setShowModal] = useState(false);
 
     const router = useRouter();
