@@ -1,14 +1,14 @@
+import ImageUpload from "@/components/ImageUpload";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import {API_URL} from "@/config/index";
 import styles from "@/styles/Form.module.css";
 import moment from "moment";
-import {shouldHardNavigate} from "next/dist/client/components/router-reducer/should-hard-navigate";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useState} from "react";
-import {FaImage} from "react-icons/all";
+import {FaImage} from "react-icons/fa";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -54,11 +54,23 @@ export default function EditEventPage({evt}) {
         }
     };
 
+    const imageUploaded = async (e) => {
+        const res = await fetch(`${API_URL}/api/events/${evt.id}?populate=*`);
+        const data = await res.json();
+        setImagePreview(
+            data.data.attributes.image.data.attributes.formats.thumbnail.url
+        );
+        if (!res.ok) {
+            toast.error("Something went Wrong");
+        }
+        setShowModal(false);
+    };
+
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setValue({...values, [name]: value});
     };
-
+    
     return (<Layout title="add event">
         <Link href="/events">Go Back</Link>
         <h1>Edit Event</h1>
@@ -142,13 +154,10 @@ export default function EditEventPage({evt}) {
         </form>
 
         <h2>Event Image</h2>
-        {
-            imagePreview ? (
-                <Image src={imagePreview} alt={evt.attributes.name} height={100} width={170}/>) : (
-                <div><p>No Image uploaded</p></div>
+        {imagePreview ? (<Image src={imagePreview} alt={evt.attributes.name} height={100} width={170}/>) : (
+            <div><p>No Image uploaded</p></div>
 
-            )
-        }
+        )}
         <div>
             <button className={'btn-secondary'} onClick={() => setShowModal(true)}>
                 <FaImage/> Set Image
@@ -156,7 +165,7 @@ export default function EditEventPage({evt}) {
         </div>
 
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-            IMAGE UPLOAD
+            <ImageUpload imageUploaded={imageUploaded} evtId={evt.id}/>
         </Modal>
     </Layout>);
 }
