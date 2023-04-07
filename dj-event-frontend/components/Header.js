@@ -1,13 +1,15 @@
 import Search from "@/components/Search";
 import AuthContext from "@/context/AuthContext";
 import styles from '@/styles/Header.module.css';
+import {log} from "next/dist/server/typescript/utils";
 import Link from "next/link";
 import {useContext} from "react";
 import {FaSignInAlt} from "react-icons/fa";
 
 export default function Header() {
 
-    const {user, logOut} = useContext(AuthContext);
+    // const {user, logOut} = useContext(AuthContext);
+    const authCtx = useContext(AuthContext);
 
 
     return (
@@ -23,7 +25,7 @@ export default function Header() {
                             Events
                         </Link>
                     </li>
-                    {user ? <>
+                    {authCtx.user ? <>
                         <li>
                             <Link href={'/events/add'}>
                                 Add Event
@@ -35,7 +37,7 @@ export default function Header() {
                             </Link>
                         </li>
                         <li>
-                            <button onClick={() => logOut} className={'btn-secondary btn-icon'}>
+                            <button onClick={() => authCtx.logOut} className={'btn-secondary btn-icon'}>
                                 Logout
                             </button>
                         </li>

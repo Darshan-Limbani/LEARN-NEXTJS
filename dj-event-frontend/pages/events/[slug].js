@@ -10,9 +10,9 @@ import styles from "../../styles/Event.module.css";
 
 export default function EventPage({evt}) {
     const router = useRouter();
-    console.log(evt);
+    // console.log(evt);
     const deleteEvent = async (e) => {
-        console.log("delete");
+        // console.log("delete");
         if (confirm("Are you sure?")) {
             const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
                 method: "DELETE",

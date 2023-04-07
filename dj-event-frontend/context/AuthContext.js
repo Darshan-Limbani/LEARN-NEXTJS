@@ -17,13 +17,31 @@ export const AuthProvider = ({children}) => {
 
     const register = async (user) => {
         console.log(user);
+        const res = await fetch(`${NEXT_URL}/api/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        const data = await res.json();
+        // console.log("AUTH : ", data);
+        if (res.ok) {
+            setUser(data.user);
+            router.push('/account/dashboard');
+        } else {
+            // toast.error("ERROR");
+            setError(data.message);
+            // setError(null);
+        }
     };
 
 //     Login User
 
     const login = async ({email: identifier, password}) => {
 
-        console.log("LOGIN IN AUTH", identifier, password);
+        // console.log("LOGIN IN AUTH", identifier, password);
 
         const res = await fetch(`${NEXT_URL}/api/login`, {
             method: 'POST',
@@ -36,7 +54,7 @@ export const AuthProvider = ({children}) => {
         });
 
         const data = await res.json();
-        console.log("AUTH : ", data);
+        // console.log("AUTH : ", data);
         if (res.ok) {
             setUser(data.user);
             router.push('/account/dashboard');
@@ -49,7 +67,7 @@ export const AuthProvider = ({children}) => {
 
 //     LogOut User
     const logOut = async () => {
-        console.log('logOut');
+        // console.log('logOut');
         const res = await fetch(`${NEXT_URL}/api/logout`, {
             method: 'POST'
         });

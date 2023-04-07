@@ -2,16 +2,17 @@ import {API_URL} from "@/config/index";
 import cookie from "cookie";
 
 export default async (req, res) => {
-    // console.log('identifier, password', req.body.identifier, req.body.password);
+    console.log('email,user, password', req.body.email, req.body.username, req.body.password);
     if (req.method === 'POST') {
-        const {identifier, password} = req.body;
-        const strapiRes = await fetch(`${API_URL}/api/auth/local`, {
+        const {username, email, password} = req.body;
+        const strapiRes = await fetch(`${API_URL}/api/auth/local/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                identifier,
+                username,
+                email,
                 password
             })
         });
@@ -24,7 +25,7 @@ export default async (req, res) => {
                 {
                     httpOnly: true,
                     isSecureContext: process.env.NODE_ENV !== 'development',
-                    maxAge: 60 * 60 * 4 * 7,
+                    maxAge: 60 * 60 * 24 * 7,
                     sameSite: 'strict',
                     path: '/'
                 }

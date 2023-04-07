@@ -13,7 +13,7 @@ import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function EditEventPage({evt}) {
-    console.log(evt);
+    // console.log(evt);
     const [values, setValue] = useState({
         name: evt.attributes.name,
         performers: evt.attributes.performers,
@@ -32,7 +32,7 @@ export default function EditEventPage({evt}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("submit");
+        // console.log("submit");
 
         const hasEmptyFields = Object.values(values).some((element) => element === "");
 
@@ -174,7 +174,7 @@ export default function EditEventPage({evt}) {
 export async function getServerSideProps({params: {id}, req}) {
     const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
     const {data: evt} = await res.json();
-    console.log("COOKIE:------------", req.headers.cookie);
+    // console.log("COOKIE:------------", req.headers.cookie);
     return {
         props: {evt}
     };

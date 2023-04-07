@@ -3,7 +3,7 @@ import {useState} from "react";
 import styles from '@/styles/Form.module.css';
 
 export default function ImageUpload({evtId, imageUploaded}) {
-    console.log("ID...............", evtId);
+    // console.log("ID...............", evtId);
     const [image, setImage] = useState(null);
 
     function handleFileChange(e) {
