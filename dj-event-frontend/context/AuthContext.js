@@ -18,11 +18,9 @@ export const AuthProvider = ({children}) => {
     const register = async (user) => {
         console.log(user);
         const res = await fetch(`${NEXT_URL}/api/register`, {
-            method: 'POST',
-            headers: {
+            method: 'POST', headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
+            }, body: JSON.stringify(user)
         });
 
         const data = await res.json();
@@ -44,11 +42,10 @@ export const AuthProvider = ({children}) => {
         // console.log("LOGIN IN AUTH", identifier, password);
 
         const res = await fetch(`${NEXT_URL}/api/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+            method: 'POST', headers: {
+                'Content-Type': 'application/json',
+                
+            }, body: JSON.stringify({
                 identifier, password
             })
         });
@@ -93,9 +90,8 @@ export const AuthProvider = ({children}) => {
         }
     };
 
-    return (
-        <AuthContext.Provider value={{user, setError, error, register, login, logOut}}>{children}</AuthContext.Provider>
-    );
+    return (<AuthContext.Provider
+        value={{user, setError, error, register, login, logOut}}>{children}</AuthContext.Provider>);
 };
 
 export default AuthContext;
