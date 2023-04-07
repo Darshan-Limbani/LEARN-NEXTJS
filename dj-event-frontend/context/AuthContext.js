@@ -50,6 +50,16 @@ export const AuthProvider = ({children}) => {
 //     LogOut User
     const logOut = async () => {
         console.log('logOut');
+        const res = await fetch(`${NEXT_URL}/api/logout`, {
+            method: 'POST'
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setUser(null);
+            router.push('/');
+        } else {
+        }
+
     };
 
 //     Check is user is logged in
@@ -63,8 +73,6 @@ export const AuthProvider = ({children}) => {
         } else {
             setUser(null);
         }
-
-
     };
 
     return (
