@@ -36,7 +36,7 @@ export default function Header() {
                         </li>
                         <li>
                             <button onClick={() => logOut} className={'btn-secondary btn-icon'}>
-                                Add Event
+                                Logout
                             </button>
                         </li>
                     </> : <>
