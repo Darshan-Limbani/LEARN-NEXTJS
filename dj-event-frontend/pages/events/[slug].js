@@ -11,34 +11,20 @@ import styles from "../../styles/Event.module.css";
 export default function EventPage({evt}) {
     const router = useRouter();
     // console.log(evt);
-    const deleteEvent = async (e) => {
-        // console.log("delete");
-        if (confirm("Are you sure?")) {
-            const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
-                method: "DELETE",
-            });
 
-            const data = await res.json();
-            if (!res.ok) {
-                toast.error("something went wrong");
-            } else {
-                router.push("/events");
-            }
-        }
-    };
     return (
         <Layout title="my event">
             <div className={styles.event}>
-                <div className={styles.controls}>
-                    <Link href={`/events/edit/${evt.id}`}>
-                        <FaPencilAlt/>
-                        Edit Event
-                    </Link>
-                    <a href="#" className={styles.delete} onClick={deleteEvent}>
-                        <FaTimes/>
-                        Delete Event
-                    </a>
-                </div>
+                {/*<div className={styles.controls}>*/}
+                {/*    <Link href={`/events/edit/${evt.id}`}>*/}
+                {/*        <FaPencilAlt/>*/}
+                {/*        Edit Event*/}
+                {/*    </Link>*/}
+                {/*    <a href="#" className={styles.delete} onClick={deleteEvent}>*/}
+                {/*        <FaTimes/>*/}
+                {/*        Delete Event*/}
+                {/*    </a>*/}
+                {/*</div>*/}
                 <span>
                 {new Date(evt.attributes.date).toLocaleDateString("en-US")} at{" "}
                     {evt.attributes.time}

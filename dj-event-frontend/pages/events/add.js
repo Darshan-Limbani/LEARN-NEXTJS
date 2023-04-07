@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import {API_URL} from "@/config/index";
+import {parseCookie} from "@/helpers/index";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useState} from "react";
@@ -7,7 +8,7 @@ import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../styles/Form.module.css";
 
-export default function AddEventPage() {
+export default function AddEventPage({token}) {
     const [values, setValue] = useState({
         name: "",
         performers: "",
@@ -36,12 +37,17 @@ export default function AddEventPage() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({data: values}),
         });
 
         if (!res.ok) {
-            toast.error("something went wrong");
+            if (res.status === 401 || res.status === 403) {
+                toast.error("No token included");
+                return;
+            }
+            toast.error('Something went Wrong!');
         } else {
             const evt = await res.json();
             router.push(`/events/${evt.data.attributes.slug}`);
@@ -137,4 +143,14 @@ export default function AddEventPage() {
             </form>
         </Layout>
     );
+}
+
+
+export async function getServerSideProps({req}) {
+    const {token} = parseCookie(req);
+    return {
+        props: {
+            token
+        }
+    };
 }

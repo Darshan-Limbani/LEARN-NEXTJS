@@ -2,6 +2,7 @@ import ImageUpload from "@/components/ImageUpload";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import {API_URL} from "@/config/index";
+import {parseCookie} from "@/helpers/index";
 import styles from "@/styles/Form.module.css";
 import moment from "moment";
 import Image from "next/image";
@@ -12,8 +13,8 @@ import {FaImage} from "react-icons/fa";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function EditEventPage({evt}) {
-    // console.log(evt);
+export default function EditEventPage({evt, token}) {
+    console.log("EDIT : -----------", evt, token);
     const [values, setValue] = useState({
         name: evt.attributes.name,
         performers: evt.attributes.performers,
@@ -40,13 +41,19 @@ export default function EditEventPage({evt}) {
             toast.error("Please fill in all fields");
         }
 
-        const res = await fetch(`${API_URL}/api/events`, {
-            method: "POST", headers: {
+        const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
+            method: "PUT",
+            headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             }, body: JSON.stringify({data: values}),
         });
 
         if (!res.ok) {
+            if (res.status === 401 || res.status === 403) {
+                toast.error("Unauthorized");
+                return;
+            }
             toast.error("something went wrong");
         } else {
             const evt = await res.json();
@@ -150,7 +157,7 @@ export default function EditEventPage({evt}) {
                 ></textarea>
             </div>
 
-            <input type="submit" value="Add Event" className="btn"/>
+            <input type="submit" value="Edit Event" className="btn"/>
         </form>
 
         <h2>Event Image</h2>
@@ -165,17 +172,18 @@ export default function EditEventPage({evt}) {
         </div>
 
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-            <ImageUpload imageUploaded={imageUploaded} evtId={evt.id}/>
+            <ImageUpload imageUploaded={imageUploaded} evtId={evt.id} token={token}/>
         </Modal>
     </Layout>);
 }
 
 
 export async function getServerSideProps({params: {id}, req}) {
+    const {token} = parseCookie(req);
     const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
     const {data: evt} = await res.json();
     // console.log("COOKIE:------------", req.headers.cookie);
     return {
-        props: {evt}
+        props: {evt, token}
     };
 }
